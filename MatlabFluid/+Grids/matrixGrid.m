@@ -42,6 +42,20 @@ classdef matrixGrid
 
         end
 
+        function obj = at(obj,G)
+            
+            [n1, n2] = size(obj.Q);
+
+            for i = 1:n1
+                for j = 1:n2
+
+                    obj.Q{i,j} = obj.Q{i,j}.at(G);  
+
+                end
+            end
+
+        end
+
         function obj = scale(obj,S)
             
 
@@ -108,6 +122,75 @@ classdef matrixGrid
 
         end
 
+        function A = ctranspose(obj)
+
+            [n1, n2] = size(obj.Q);
+
+            A = obj;
+
+            for i = 1:n1
+                for j = 1:n2
+
+                    A.Q{i,j} = obj.Q{j,i};  
+
+                end
+            end
+
+        end
+
+        function M2 = plus(obj, M)
+
+            [n1, n2] = size(obj.Q);
+
+            M2 = obj;
+
+            try
+            for i = 1:n1
+                for j = 1:n2
+
+                    M2.Q{i,j} = obj.Q{i,j} + M.Q{i,j};  
+
+                end
+            end
+
+            catch
+                for i = 1:n1
+                    for j = 1:n2
+
+                        M2.Q{i,j} = obj.Q{i,j} + M;
+
+                    end
+                end
+            end
+
+        end
+
+        function M2 = minus(obj, S)
+
+            [n1, n2] = size(obj.Q);
+
+            M2 = obj;
+
+            try
+                for i = 1:n1
+                    for j = 1:n2
+
+                        M2.Q{i,j} = obj.Q{i,j} - S;
+
+                    end
+                end
+            catch
+
+                for i = 1:n1
+                    for j = 1:n2
+
+                        M2.Q{i,j} = obj.Q{i,j} - S.Q{i,j};
+
+                    end
+                end
+            end
+
+        end
 
     end
 end

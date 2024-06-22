@@ -19,6 +19,16 @@ classdef vectorGrid
 
         end
 
+        function obj = at(obj,G)
+            
+            [n1] = numel(obj.Q);
+
+            for i = 1:n1
+                obj.Q{i} = obj.Q{i}.at(G);  
+            end
+
+        end
+
         function pcolor(obj)
             nQ = numel(obj.Q);
 
@@ -47,9 +57,31 @@ classdef vectorGrid
 
             [n1] = numel(obj.Q);
 
+            try
             for i = 1:n1
                 obj.Q{i}.Q = S*obj.Q{i}.Q;  
             end
+            catch
+            for i = 1:n1
+                obj.Q{i} = S*obj.Q{i};  
+            end
+            end
+
+        end
+
+        function S = mag(obj)
+            
+            nQ = numel(obj.Q);
+
+            S = obj.Q{1};
+
+            A = 0*obj.Q{1}.Q;
+
+            for i = 1:nQ
+                A = A + obj.Q{i}.Q.^2;
+            end
+
+            S.Q = A;
 
         end
 
@@ -57,10 +89,16 @@ classdef vectorGrid
 
             nQ = numel(obj.Q);
 
-            V2 = V;
+            V2 = obj;
 
-            for i = 1:nQ
-                V2.Q{i} = obj.Q{i}+V.Q{i};
+            try
+                for i = 1:nQ
+                    V2.Q{i} = obj.Q{i}+V.Q{i};
+                end
+            catch
+                for i = 1:nQ
+                    V2.Q{i} = obj.Q{i}+V;
+                end
             end
 
         end
@@ -95,7 +133,7 @@ classdef vectorGrid
 
             for i = 1:n1
                 
-                obj.Q{i}.Q = obj.Q{i}.Q.shift(V);  
+                obj.Q{i} = obj.Q{i}.shift(V);  
 
             end
 
@@ -155,6 +193,18 @@ classdef vectorGrid
             S.Q{2,1} = obj.Q{2}*Q.Q{1};
             S.Q{2,2} = obj.Q{2}*Q.Q{2};
             
+        end
+
+        function obj = rdivide(obj,S)
+
+            [n1] = numel(obj.Q);
+
+            for i = 1:n1
+                
+                obj.Q{i} = obj.Q{i}./S;  
+
+            end
+
         end
     end
 end

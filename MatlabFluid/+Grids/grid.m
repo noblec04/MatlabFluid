@@ -44,6 +44,12 @@ classdef grid
            end
         end
 
+        function obj = scale(obj,S)
+            
+            obj.Q = S*obj.Q;  
+
+        end
+
         function obj = at(obj,G)
             
             F = griddedInterpolant(obj.X',obj.Y',obj.Q');
@@ -58,8 +64,8 @@ classdef grid
 
             F = griddedInterpolant(obj.X',obj.Y',obj.Q');
 
-            obj.X = obj.X + V.Q{1};
-            obj.Y = obj.Y + V.Q{2};
+            obj.X = obj.X + V.Q{1}.Q;
+            obj.Y = obj.Y + V.Q{2}.Q;
             obj.Q = F(obj.X',obj.Y')';
 
         end
@@ -68,7 +74,7 @@ classdef grid
 
             obj.Q(obj.Q>lim) = lim;
             obj.Q(obj.Q<-lim) = -lim;
-            obj.Q = imgaussfilt(obj.Q,0.8);
+            obj.Q = imgaussfilt(obj.Q,0.5);
             
         end
 
